@@ -1,0 +1,107 @@
+---
+title: "Task_5"
+author: "Robert Nagy"
+format: html
+editor: visual
+---
+```{r}
+# ------------------------------------------------------------
+# TASK 5: Visualising Your Universe (Base R & ggplot2)
+# ------------------------------------------------------------
+
+
+library(dplyr)
+library(ggplot2)
+# library(readxl) # Pre reálne dáta zo súboru Sweden_task3.xlsx
+
+
+my_real_data <- data.frame(
+  city = c("Stockholm", "Gothenburg", "Malmo", "Uppsala", "Vasteras", "Orebro", "Linkoping", "Helsingborg", "Jonkoping", "Norrkoping", "Lund", "Gavle", "Solna", "Nacka", "Sundsvall"),
+  population = c(975000, 580000, 345000, 166000, 155000, 130000, 110000, 105000, 95000, 93000, 92000, 75000, 85000, 70000, 60000),
+  population_proper = c(950000, 550000, 320000, 150000, 140000, 120000, 100000, 95000, 85000, 80000, 85000, 65000, 80000, 65000, 55000),
+  admin_name = c("Stockholm County", "Vastra Gotaland County", "Skane County", "Uppsala County", "Vastmanland County", "Orebro County", "Ostergotland County", "Skane County", "Jonkoping County", "Ostergotland County", "Skane County", "Gavleborg County", "Stockholm County", "Stockholm County", "Vasternorrland County"),
+  capital = factor(c("primary", "admin", "admin", "minor", "minor", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA))
+)
+
+my_data_viz <- my_real_data %>%
+  mutate(City_Size = ifelse(population >= 200000, "Veľké mesto", "Malé/Stredné mesto")) %>%
+  mutate(population_diff = population - population_proper)
+
+
+
+# ------------------------------------------------------------
+
+cat("### 5.1. Rýchly náčrt (Base R Histogram) ###\n")
+# ----------------------------------------------------------
+# 5.1. The Quick Sketch (Base R Histogram)
+# Vizualizácia distribúcie populácie
+# ----------------------------------------------------------
+hist(my_data_viz$population,
+     main = "Distribúcia Populácie Města (Všetky Záznamy)",
+     xlab = "Populácia",
+     col = "lightblue",
+     border = "white")
+
+
+cat("\n### 5.2. Mapa vzťahov (ggplot2 Scatter Plot) ###\n")
+# ----------------------------------------------------------
+# 5.2. The Relationship Map (ggplot2 Scatter Plot)
+# Vzťah medzi population a population_proper
+# ----------------------------------------------------------
+scatter_plot <- ggplot(data = my_data_viz, aes(x = population_proper, y = population, color = City_Size)) +
+  geom_point(alpha = 0.8, size = 3) + 
+  geom_smooth(method = "lm", se = FALSE, color = "gray50") + # Pridanie trendovej čiary
+  labs(
+    title = "Korelácia medzi Population Proper a Celkovou Populáciou",
+    x = "Population Proper",
+    y = "Celková Populácia",
+    color = "Kategória"
+  ) +
+  theme_minimal()
+print(scatter_plot)
+
+
+cat("\n### 5.3. Porovnanie (ggplot2 Boxplot) ###\n")
+# ----------------------------------------------------------
+# 5.3. The Comparison (ggplot2 Boxplot)
+# Porovnanie populácie podľa typu hlavného mesta (capital)
+# ----------------------------------------------------------
+boxplot <- ggplot(data = my_data_viz, aes(x = capital, y = population, fill = capital)) +
+  geom_boxplot(na.rm = TRUE) + 
+  labs(
+    title = "Porovnanie Populácie podľa Kategórie Hlavného Mesta",
+    x = "Typ Kategórie (primary, admin, minor, NA)",
+    y = "Populácia"
+  ) +
+  scale_fill_brewer(palette = "Set3", na.value = "gray") + 
+  theme_light() +
+  theme(legend.position = "none")
+print(boxplot)
+
+
+cat("\n### 5.4. Hĺbková analýza (Faceting) ###\n")
+# ----------------------------------------------------------
+# 5.4. The "Deep Dive" (Faceting)
+
+facet_plot <- ggplot(data = my_data_viz, aes(x = population, y = population_diff)) +
+  geom_point(aes(color = admin_name), size = 3) +
+  geom_smooth(method = "lm", se = FALSE, linewidth = 0.5) +
+  facet_wrap(~ City_Size, scales = "free_x") + 
+  labs(
+    title = "Rozdiel Populácií (Diff) vs. Celková Populácia podľa Veľkosti Mesta",
+    x = "Celková Populácia",
+    y = "Rozdiel (Population - Population Proper)",
+    color = "Admin Región"
+  ) +
+  theme_bw()
+print(facet_plot)
+
+
+# 3. EXPORT (TASK 5.5)
+# ----------------------------------------------------------
+# Ak chcete plot uložiť, spustite nasledujúce riadky priamo v R konzole
+# alebo v bloku s eval=TRUE (pre .Rmd).
+# ggsave("my_universe_plot_scatter.png", plot = scatter_plot, width = 8, height = 6)
+# ----------------------------------------------------------
+```
+
