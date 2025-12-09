@@ -1,0 +1,133 @@
+---
+title: "Task_1"
+author: "Robert Nagy"
+format: html
+editor: visual
+---
+```{r}
+### ------------------------------------------------------------
+### TASK 1: Exploring Data Types in R
+### Theme: Planet Aurora (fictional exoplanet)
+### ------------------------------------------------------------
+
+### 1.1. ATOMIC TYPES ----
+
+# Numeric values (continuous)
+gravity <- 9.8          # gravitational force (m/s^2)
+temperature <- 27.5      # average surface temperature (°C)
+radius <- 6800.3         # in kilometers
+rating <- 8.9            # exploration rating (out of 10)
+
+# Integer values (whole numbers)
+moons <- 3L              # number of moons
+cities <- 12L            # number of major cities
+inhabitants_mil <- 45L   # number of inhabitants in millions
+
+# Logical values (TRUE/FALSE)
+has_water <- TRUE
+is_inhabited <- TRUE
+
+# Character values (text)
+name <- "Aurora"
+region <- "Andromeda Sector"
+category <- "Class M Planet"
+
+# Print description
+cat("Planet", name, "in the", region, "is a", category,
+    "with gravity", gravity, "m/s^2 and average temperature", temperature, "°C.\n")
+
+### ------------------------------------------------------------
+### 1.2. VECTORS ----
+
+# 1. Numeric vector (combine numeric + integer)
+numeric_vector <- c(gravity, temperature, radius, rating, moons, cities, inhabitants_mil)
+print(numeric_vector)
+
+# 2. Sequence vector (from 20 to 100 by 8)
+seq_vector <- seq(20, 100, by = 8)
+print(seq_vector)
+
+# 3. Logical vector (10 random TRUE/FALSE)
+logical_vector <- sample(c(TRUE, FALSE), size = 10, replace = TRUE)
+print(logical_vector)
+
+### ------------------------------------------------------------
+### 1.3. MATRIX ----
+
+# Create a 3x3 matrix with random numbers from -50 to 50
+set.seed(42)  # for reproducibility
+energy_matrix <- matrix(sample(-50:50, 9, replace = TRUE), nrow = 3, ncol = 3)
+
+# Name rows and columns
+rownames(energy_matrix) <- c("North", "Equator", "South")
+colnames(energy_matrix) <- c("Zone_A", "Zone_B", "Zone_C")
+
+# Show matrix
+print(energy_matrix)
+
+# Row and column averages
+cat("\nRow Means:\n")
+print(rowMeans(energy_matrix))
+cat("\nColumn Means:\n")
+print(colMeans(energy_matrix))
+
+### ------------------------------------------------------------
+### 1.4. LIST ----
+
+aurora_list <- list(
+  name = name,
+  region = region,
+  category = category,
+  gravity = gravity,
+  temperature = temperature,
+  radius = radius,
+  rating = rating,
+  moons = moons,
+  cities = cities,
+  inhabitants_mil = inhabitants_mil,
+  has_water = has_water,
+  is_inhabited = is_inhabited,
+  numeric_vector = numeric_vector,
+  seq_vector = seq_vector,
+  logical_vector = logical_vector,
+  energy_matrix = energy_matrix,
+  description = "Aurora is a Class M exoplanet with thriving life and moderate climate."
+)
+
+# Print list structure
+str(aurora_list)
+
+### ------------------------------------------------------------
+### 1.5. FACTOR ----
+
+# Create factor for population development stages
+development_stage <- factor(c("early", "developing", "developing", "advanced", "advanced", "advanced"))
+
+# Show frequency table
+table(development_stage)
+
+### ------------------------------------------------------------
+### 1.6. DATA FRAME ----
+
+# Create a data frame of major cities on Aurora
+city_name <- c("Solara", "Vireon", "Mara", "Helix", "Nyra", "Kael")
+population_mil <- c(12.5, 8.7, 7.3, 5.9, 6.8, 4.5)
+coastal <- c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE)
+stage <- factor(c("advanced", "developing", "developing", "early", "advanced", "developing"))
+
+aurora_df <- data.frame(city_name, population_mil, coastal, stage)
+
+# Rename columns
+colnames(aurora_df) <- c("City", "Population_mil", "Is_Coastal", "Development_Stage")
+
+# Display structure and summary
+str(aurora_df)
+summary(aurora_df)
+
+# Add new derived column: population density index (fictional calculation)
+aurora_df$Density_Index <- aurora_df$Population_mil * ifelse(aurora_df$Is_Coastal, 1.2, 0.9)
+
+# Display final data frame
+print(aurora_df)
+```
+
