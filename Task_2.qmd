@@ -1,0 +1,85 @@
+---
+title: "Task_2"
+author: "Robert_Nagy"
+format: html
+editor: visual
+---
+
+```{r}
+### ---- 2.1. Príprava objektov (nutné pre Task 2) ----
+
+# Sequence vector z Task 1 (pravdepodobná verzia)
+seq_vector <- seq(10, 100, by = 10)
+
+# Logical vector z Task 1 (príklad – TRUE/FALSE striedanie)
+logical_vector <- c(TRUE, FALSE, TRUE, TRUE, FALSE, TRUE)
+
+# Aurora_list z Task 1 (doplnený príklad)
+aurora_list <- list(
+  description = "Aurora Project Universe",
+  seq_vector = seq_vector,
+  energy_matrix = matrix(1:9, nrow = 3)
+)
+
+# Aurora_df z Task 1 (príkladová verzia)
+aurora_df <- data.frame(
+  City = c("Nova", "Lumina", "Altair", "Solaria", "Cryos", "Vesper"),
+  Population_mil = c(8.2, 5.5, 9.1, 6.3, 4.8, 7.0),
+  Is_Coastal = c(TRUE, FALSE, TRUE, FALSE, TRUE, TRUE),
+  Development_Stage = c("advanced", "developing", "advanced", "emerging", "advanced", "developing"),
+  Density_Index = c(120, 95, 140, 110, 90, 130)
+)
+
+### ---- 2.1. Querying Vectors ----
+
+## 2.1.1. From the Sequence vector (seq_vector)
+seq_vector[3]
+seq_vector[2:5]
+seq_vector[seq_vector > 50]
+
+## 2.1.2. From the Logical vector (logical_vector)
+logical_vector[logical_vector]
+which(logical_vector)
+
+### ---- 2.2. Querying Your "Universe" List ----
+aurora_list$description
+aurora_list[["energy_matrix"]]
+aurora_list$seq_vector[2]
+
+### ---- 2.3. Investigating Your Data Frame ----
+head(aurora_df, 3)
+aurora_df[4, 1]
+aurora_df$Is_Coastal
+
+df_subset <- aurora_df[aurora_df$Is_Coastal & aurora_df$Population_mil > 6, ]
+df_subset
+
+df_subset_2 <- aurora_df[aurora_df$Development_Stage %in% c("advanced", "developing"), ]
+df_subset_2
+
+### ---- 2.4. Handling "Corrupted" Data (NA) ----
+df_corrupted <- aurora_df
+
+df_corrupted[2, 2] <- NA
+df_corrupted[5, 4] <- NA
+df_corrupted[6, 5] <- NA
+
+df_corrupted
+sum(is.na(df_corrupted))
+colSums(is.na(df_corrupted))
+mean(df_corrupted$Population_mil, na.rm = TRUE)
+
+df_clean <- na.omit(df_corrupted)
+df_clean
+
+### ---- 2.5. Bonus Challenge: which() ----
+highest_pop_index <- which.max(aurora_df$Population_mil)
+aurora_df[highest_pop_index, ]
+
+lowest_pop_index <- which.min(aurora_df$Population_mil)
+aurora_df[lowest_pop_index, ]
+```
+
+
+
+
