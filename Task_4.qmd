@@ -1,0 +1,63 @@
+---
+title: "Task4"
+author: "Robert Nagy"
+format: html
+editor: visual
+---
+
+```{r}
+# Potrebné balíky
+library(readr)
+library(dplyr)
+library(readxl)   # na čítanie Excel súborov
+
+welcome_to_my_universe <- function(universe_name) {
+  cat("--------------------------------\n")
+  cat("Analysis Toolkit for:", universe_name, "\n")
+  cat("--------------------------------\n")
+}
+
+load_and_inspect <- function(file_path) {
+  data <- read_csv(file_path)
+  cat("--- Data Loaded:", file_path, "---\n")
+  print(glimpse(data))
+  cat("\n--- First 6 Rows: ---\n")
+  print(head(data))
+  return(data)
+}
+
+filter_by_value <- function(data, column_name, value) {
+  result <- data |> filter(.data[[column_name]] == value)
+  return(result)
+}
+
+generate_report <- function(data, category_column, category_name) {
+  d <- data |> filter(.data[[category_column]] == category_name)
+  
+  # použijeme stĺpec population, lebo je číselný
+  mean_value <- mean(d$population, na.rm = TRUE)
+  max_value  <- max(d$population, na.rm = TRUE)
+  min_value  <- min(d$population, na.rm = TRUE)
+  count_value <- nrow(d)
+  
+  cat("--- Report for:", category_name, "---\n")
+  cat("Records:", count_value, "\n")
+  cat("Mean population:", mean_value, "\n")
+  cat("Max population:", max_value, "\n")
+  cat("Min population:", min_value, "\n")
+  cat("--------------------------------\n\n")
+}
+
+# Spustenie
+welcome_to_my_universe("My Universe")
+
+# načítanie Excelu
+my_real_data <- read_excel("Sweden_task3.xlsx")
+
+# filtrovanie podľa krajiny (country)
+filtered <- filter_by_value(my_real_data, "country", "Sweden")
+print(filtered)
+
+# report podľa krajiny
+generate_report(my_real_data, "country", "Sweden")
+```
